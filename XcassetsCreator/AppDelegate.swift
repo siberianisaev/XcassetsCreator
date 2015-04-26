@@ -81,10 +81,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var assetsDict = [String: Asset]()
         for imageFileName in sorted {
             var name = imageFileName.stringByDeletingPathExtension
-            name = name.stringByReplacingOccurrencesOfString("@2x", withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
-            name = name.stringByReplacingOccurrencesOfString("@3x", withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
-            name = name.stringByReplacingOccurrencesOfString("~ipad", withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
-            name = name.stringByReplacingOccurrencesOfString("~iphone", withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+            for value in ["-568h", "@2x", "@3x", "~ipad", "~iphone"] {
+                name = name.stringByRemoveSubstring(value)
+            }
             if name.isEmpty {
                 continue
             }

@@ -13,6 +13,7 @@
 		653E56801AECBD1400AD8FA0 /* XcassetsCreatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E567F1AECBD1400AD8FA0 /* XcassetsCreatorTests.swift */; };
 		653E568A1AECBDCC00AD8FA0 /* OpenPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E56891AECBDCC00AD8FA0 /* OpenPanel.swift */; };
 		653E568E1AECD58E00AD8FA0 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E568D1AECD58E00AD8FA0 /* Asset.swift */; };
+		783A3DCE1AED5D1300008E8A /* String+Addition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783A3DCD1AED5D1300008E8A /* String+Addition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		653E567F1AECBD1400AD8FA0 /* XcassetsCreatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XcassetsCreatorTests.swift; sourceTree = "<group>"; };
 		653E56891AECBDCC00AD8FA0 /* OpenPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPanel.swift; sourceTree = "<group>"; };
 		653E568D1AECD58E00AD8FA0 /* Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		783A3DCD1AED5D1300008E8A /* String+Addition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Addition.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				653E566E1AECBD1400AD8FA0 /* AppDelegate.swift */,
 				653E568D1AECD58E00AD8FA0 /* Asset.swift */,
 				653E56891AECBDCC00AD8FA0 /* OpenPanel.swift */,
+				783A3DCD1AED5D1300008E8A /* String+Addition.swift */,
 				653E56701AECBD1400AD8FA0 /* Images.xcassets */,
 				653E56721AECBD1400AD8FA0 /* MainMenu.xib */,
 				653E566C1AECBD1400AD8FA0 /* Supporting Files */,
@@ -213,6 +216,7 @@
 			files = (
 				653E568A1AECBDCC00AD8FA0 /* OpenPanel.swift in Sources */,
 				653E568E1AECD58E00AD8FA0 /* Asset.swift in Sources */,
+				783A3DCE1AED5D1300008E8A /* String+Addition.swift in Sources */,
 				653E566F1AECBD1400AD8FA0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +408,7 @@
 				653E56851AECBD1400AD8FA0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		653E56861AECBD1400AD8FA0 /* Build configuration list for PBXNativeTarget "XcassetsCreatorTests" */ = {
 			isa = XCConfigurationList;
@@ -412,6 +417,7 @@
 				653E56881AECBD1400AD8FA0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

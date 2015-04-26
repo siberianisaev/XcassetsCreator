@@ -17,7 +17,7 @@ class Asset {
     private var isUniversal: Bool {
         for image in images {
             for value in ["~ipad", "~iphone"] {
-                if image.rangeOfString(value, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                if image.hasSubstring(value) {
                     return false
                 }
             }
@@ -27,7 +27,7 @@ class Asset {
     
     private var hasPhonePostfix: Bool {
         for image in images {
-            if image.rangeOfString("~iphone", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+            if image.hasSubstring("~iphone") {
                 return true
             }
         }
@@ -70,9 +70,9 @@ class Asset {
         if isUniversal {
             var names = [Int: String]()
             for image in images {
-                if image.rangeOfString("@3x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                if image.hasSubstring("@3x") {
                     names[3] = image
-                } else if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                } else if image.hasSubstring("@2x") {
                     names[2] = image
                 } else {
                     names[1] = image
@@ -92,34 +92,38 @@ class Asset {
             var namesIphone = [Int: String]()
             var namesIpad = [Int: String]()
             let hasPhonePostfix = self.hasPhonePostfix
+            var imagesArray = [[String: String]]()
+            
             for image in images {
-                if hasPhonePostfix {
-                    if image.rangeOfString("~iphone", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
-                        if image.rangeOfString("@3x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                if image.hasSubstring("-568h") {
+                    imagesArray.append(["idiom": "iphone", "subtype": "retina4", "scale": "2x", "filename" : image])
+                } else if hasPhonePostfix {
+                    if image.hasSubstring("~iphone") {
+                        if image.hasSubstring("@3x") {
                             namesIphone[3] = image
-                        } else if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                        } else if image.hasSubstring("@2x") {
                             namesIphone[2] = image
                         } else {
                             namesIphone[1] = image
                         }
                     } else {
-                        if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                        if image.hasSubstring("@2x") {
                             namesIpad[2] = image
                         } else {
                             namesIpad[1] = image
                         }
                     }
                 } else {
-                    if image.rangeOfString("~ipad", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
-                        if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                    if image.hasSubstring("~ipad") {
+                        if image.hasSubstring("@2x") {
                             namesIpad[2] = image
                         } else {
                             namesIpad[1] = image
                         }
                     } else {
-                        if image.rangeOfString("@3x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                        if image.hasSubstring("@3x") {
                             namesIphone[3] = image
-                        } else if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                        } else if image.hasSubstring("@2x") {
                             namesIphone[2] = image
                         } else {
                             namesIphone[1] = image
@@ -128,7 +132,6 @@ class Asset {
                 }
             }
             
-            var imagesArray = [[String: String]]()
             for index in 1...2 {
                 var name = namesIpad[index]
                 if name == nil {
@@ -143,6 +146,7 @@ class Asset {
                 }
                 imagesArray.append(["idiom": "iphone", "scale": "\(index)x", "filename" : name!])
             }
+            
             dictionary["images"] = imagesArray
         }
         
