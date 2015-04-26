@@ -31,7 +31,7 @@ class Asset {
     
     func createAsset(folderPath: String) {
         if let name = name {
-            path = folderPath.stringByAppendingPathComponent(name)
+            path = folderPath.stringByAppendingPathComponent(name + ".imageset")
             let fm = NSFileManager.defaultManager()
             if false == fm.fileExistsAtPath(path!) {
                 var error: NSError?
