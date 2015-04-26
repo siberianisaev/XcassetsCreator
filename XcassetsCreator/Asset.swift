@@ -25,6 +25,15 @@ class Asset {
         return true
     }
     
+    private var hasPhonePostfix: Bool {
+        for image in images {
+            if image.rangeOfString("~iphone", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                return true
+            }
+        }
+        return false
+    }
+    
     init(name: String) {
         self.name = name
     }
@@ -82,20 +91,39 @@ class Asset {
         } else {
             var namesIphone = [Int: String]()
             var namesIpad = [Int: String]()
+            let hasPhonePostfix = self.hasPhonePostfix
             for image in images {
-                if image.rangeOfString("~ipad", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
-                    if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
-                        namesIpad[2] = image
+                if hasPhonePostfix {
+                    if image.rangeOfString("~iphone", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                        if image.rangeOfString("@3x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                            namesIphone[3] = image
+                        } else if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                            namesIphone[2] = image
+                        } else {
+                            namesIphone[1] = image
+                        }
                     } else {
-                        namesIpad[1] = image
+                        if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                            namesIpad[2] = image
+                        } else {
+                            namesIpad[1] = image
+                        }
                     }
                 } else {
-                    if image.rangeOfString("@3x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
-                        namesIphone[3] = image
-                    } else if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
-                        namesIphone[2] = image
+                    if image.rangeOfString("~ipad", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                        if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                            namesIpad[2] = image
+                        } else {
+                            namesIpad[1] = image
+                        }
                     } else {
-                        namesIphone[1] = image
+                        if image.rangeOfString("@3x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                            namesIphone[3] = image
+                        } else if image.rangeOfString("@2x", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil {
+                            namesIphone[2] = image
+                        } else {
+                            namesIphone[1] = image
+                        }
                     }
                 }
             }
