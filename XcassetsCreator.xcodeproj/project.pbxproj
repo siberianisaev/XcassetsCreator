@@ -11,6 +11,8 @@
 		653E56711AECBD1400AD8FA0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 653E56701AECBD1400AD8FA0 /* Images.xcassets */; };
 		653E56741AECBD1400AD8FA0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 653E56721AECBD1400AD8FA0 /* MainMenu.xib */; };
 		653E56801AECBD1400AD8FA0 /* XcassetsCreatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E567F1AECBD1400AD8FA0 /* XcassetsCreatorTests.swift */; };
+		653E568A1AECBDCC00AD8FA0 /* OpenPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E56891AECBDCC00AD8FA0 /* OpenPanel.swift */; };
+		653E568E1AECD58E00AD8FA0 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653E568D1AECD58E00AD8FA0 /* Asset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		653E56791AECBD1400AD8FA0 /* XcassetsCreatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XcassetsCreatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		653E567E1AECBD1400AD8FA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		653E567F1AECBD1400AD8FA0 /* XcassetsCreatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XcassetsCreatorTests.swift; sourceTree = "<group>"; };
+		653E56891AECBDCC00AD8FA0 /* OpenPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPanel.swift; sourceTree = "<group>"; };
+		653E568D1AECD58E00AD8FA0 /* Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				653E566E1AECBD1400AD8FA0 /* AppDelegate.swift */,
+				653E568D1AECD58E00AD8FA0 /* Asset.swift */,
+				653E56891AECBDCC00AD8FA0 /* OpenPanel.swift */,
 				653E56701AECBD1400AD8FA0 /* Images.xcassets */,
 				653E56721AECBD1400AD8FA0 /* MainMenu.xib */,
 				653E566C1AECBD1400AD8FA0 /* Supporting Files */,
@@ -205,6 +211,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				653E568A1AECBDCC00AD8FA0 /* OpenPanel.swift in Sources */,
+				653E568E1AECD58E00AD8FA0 /* Asset.swift in Sources */,
 				653E566F1AECBD1400AD8FA0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
