@@ -81,11 +81,13 @@ class Asset {
             
             var imagesArray = [[String: String]]()
             for index in 1...3 {
-                var name = names[index]
-                if name == nil {
-                    name = ""
+                var dic = ["idiom": "universal", "scale": "\(index)x"]
+                if let name = names[index] {
+                    if false == name.isEmpty {
+                        dic["filename"] = name
+                    }
                 }
-                imagesArray.append(["idiom": "universal", "scale": "\(index)x", "filename" : name!])
+                imagesArray.append(dic)
             }
             dictionary["images"] = imagesArray
         } else {
@@ -133,18 +135,22 @@ class Asset {
             }
             
             for index in 1...2 {
-                var name = namesIpad[index]
-                if name == nil {
-                    name = ""
+                var dic = ["idiom": "ipad", "scale": "\(index)x"]
+                if let name = namesIpad[index] {
+                    if false == name.isEmpty {
+                        dic["filename"] = name
+                    }
                 }
-                imagesArray.append(["idiom": "ipad", "scale": "\(index)x", "filename" : name!])
+                imagesArray.append(dic)
             }
             for index in 1...3 {
-                var name = namesIphone[index]
-                if name == nil {
-                    name = ""
+                var dic = ["idiom": "iphone", "scale": "\(index)x"]
+                if let name = namesIphone[index] {
+                    if false == name.isEmpty {
+                        dic["filename"] = name
+                    }
                 }
-                imagesArray.append(["idiom": "iphone", "scale": "\(index)x", "filename" : name!])
+                imagesArray.append(dic)
             }
             
             dictionary["images"] = imagesArray
