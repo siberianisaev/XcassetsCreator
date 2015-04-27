@@ -30,26 +30,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func selectFolder(sender: AnyObject)
     {
-        OpenPanel.open { [unowned self] (folderPath: String?) in
-            self.folderPath = folderPath
-            
-            if let folderPath = folderPath {
-                var error: NSError?
-                if var files = NSFileManager.defaultManager().contentsOfDirectoryAtPath(folderPath, error: &error) {
-                    files = files.filter() {
-                        if let pathExtension = ($0 as? String)?.pathExtension {
-                            // Supported Image Formats https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/index.html
-                            for value in ["png", "jpg", "jpeg", "tiff", "tif", "gif", "bmp", "BMPf", "ico", "cur", "xbm"] {
-                                if pathExtension.caseInsensitiveCompare(value) == NSComparisonResult.OrderedSame {
-                                    return true
+        OpenPanel.open { [unowned self] (folders: [String]?) in
+            if let folders = folders {
+                for folderPath in folders {
+                    self.folderPath = folderPath
+                    
+                    var error: NSError?
+                    if var files = NSFileManager.defaultManager().contentsOfDirectoryAtPath(folderPath, error: &error) {
+                        files = files.filter() {
+                            if let pathExtension = ($0 as? String)?.pathExtension {
+                                // Supported Image Formats https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/index.html
+                                for value in ["png", "jpg", "jpeg", "tiff", "tif", "gif", "bmp", "BMPf", "ico", "cur", "xbm"] {
+                                    if pathExtension.caseInsensitiveCompare(value) == NSComparisonResult.OrderedSame {
+                                        return true
+                                    }
                                 }
                             }
+                            return false
                         }
-                        return false
+                        self.createAssetCataloguesWithImages(files as! [String])
+                    } else if let error = error {
+                        println(error)
                     }
-                    self.createAssetCataloguesWithImages(files as! [String])
-                } else if let error = error {
-                    println(error)
                 }
             }
         }
