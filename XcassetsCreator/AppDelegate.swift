@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var folderPath: String?
     private var assetsFolderPath: String {
-        return folderPath!.stringByAppendingPathComponent(folderPath!.lastPathComponent + ".xcassets")
+        return (folderPath! as NSString).stringByAppendingPathComponent((folderPath! as NSString).lastPathComponent + ".xcassets")
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
@@ -34,23 +34,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if let folders = folders {
                 for folderPath in folders {
                     self.folderPath = folderPath
-                    
-                    var error: NSError?
-                    if var files = NSFileManager.defaultManager().contentsOfDirectoryAtPath(folderPath, error: &error) {
+                    do {
+                        var files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(folderPath)
                         files = files.filter() {
-                            if let pathExtension = ($0 as? String)?.pathExtension {
-                                // Supported Image Formats https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/index.html
-                                for value in ["png", "jpg", "jpeg", "tiff", "tif", "gif", "bmp", "BMPf", "ico", "cur", "xbm"] {
-                                    if pathExtension.caseInsensitiveCompare(value) == NSComparisonResult.OrderedSame {
-                                        return true
-                                    }
+                            let pathExtension = ($0 as NSString).pathExtension
+                            // Supported Image Formats https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/index.html
+                            for value in ["png", "jpg", "jpeg", "tiff", "tif", "gif", "bmp", "BMPf", "ico", "cur", "xbm"] {
+                                if pathExtension.caseInsensitiveCompare(value) == NSComparisonResult.OrderedSame {
+                                    return true
                                 }
                             }
                             return false
                         }
-                        self.createAssetCataloguesWithImages(files as! [String])
-                    } else if let error = error {
-                        println(error)
+                        self.createAssetCataloguesWithImages(files)
+                    } catch {
+                        print(error)
                     }
                 }
             }
@@ -65,24 +63,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let assetsPath = assetsFolderPath
         let fm = NSFileManager.defaultManager()
         if false == fm.fileExistsAtPath(assetsPath) {
-            var error: NSError?
-            if false == fm.createDirectoryAtPath(assetsPath, withIntermediateDirectories: true, attributes: nil, error: &error) {
-                if let error = error {
-                    println(error)
-                    return
-                }
+            do {
+                try fm.createDirectoryAtPath(assetsPath, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error)
+                return
             }
         }
         
         self.progressIndicator.startAnimation(nil)
         
-        var sorted = images.sorted {
+        let sorted = images.sort({
             $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedDescending
-        }
+        })
         
         var assetsDict = [String: Asset]()
         for imageFileName in sorted {
-            var name = imageFileName.stringByDeletingPathExtension
+            var name = (imageFileName as NSString).stringByDeletingPathExtension
             for value in ["-568h", "@2x", "@3x", "~ipad", "~iphone"] {
                 name = name.stringByRemoveSubstring(value)
             }
@@ -97,17 +94,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             asset!.images.append(imageFileName)
         }
-        for (key, value) in assetsDict {
+        for (_, value) in assetsDict {
             value.createAsset(assetsFolderPath) // Create asset folder & contents json
             
             for imageName in value.images { // Copy images to asset
-                if let oldPath = folderPath?.stringByAppendingPathComponent(imageName) {
-                    if let newPath = value.path?.stringByAppendingPathComponent(imageName) {
-                        var error: NSError?
-                        fm.copyItemAtPath(oldPath, toPath: newPath, error: &error)
-                        if let error = error {
-                            println(error)
-                        }
+                if let folderPath = folderPath, path = value.path {
+                    let oldPath = (folderPath as NSString).stringByAppendingPathComponent(imageName)
+                    let newPath = (path as NSString).stringByAppendingPathComponent(imageName)
+                    do {
+                        try fm.copyItemAtPath(oldPath, toPath: newPath)
+                    } catch {
+                        print(error)
                     }
                 }
             }

@@ -21,7 +21,7 @@ class OpenPanel: NSObject {
                 var selected = [String]()
                 let fm = NSFileManager.defaultManager()
                 for URL in panel.URLs {
-                    if let path = (URL as? NSURL)?.path  {
+                    if let path = URL.path  {
                         var isDirectory: ObjCBool = false
                         if fm.fileExistsAtPath(path, isDirectory: &isDirectory) && isDirectory {
                             selected.append(path)
@@ -36,12 +36,11 @@ class OpenPanel: NSObject {
     
     class func recursiveGetDirectoriesFromDirectory(directoryPath: String) -> [String] {
         var results = [String]()
-        
-        var error: NSError? = nil
         let fm = NSFileManager.defaultManager()
-        if let fileNames = (fm.contentsOfDirectoryAtPath(directoryPath, error: &error) as? [String]) {
+        do {
+            let fileNames = try fm.contentsOfDirectoryAtPath(directoryPath)
             for fileName in fileNames {
-                let path = directoryPath.stringByAppendingPathComponent(fileName)
+                let path = (directoryPath as NSString).stringByAppendingPathComponent(fileName)
                 
                 var isDirectory: ObjCBool = false
                 if fm.fileExistsAtPath(path, isDirectory: &isDirectory) {
@@ -51,8 +50,9 @@ class OpenPanel: NSObject {
                     }
                 }
             }
+        } catch {
+            print(error)
         }
-        
         return results
     }
     

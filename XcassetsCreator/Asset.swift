@@ -40,24 +40,23 @@ class Asset {
     
     func createAsset(folderPath: String) {
         if let name = name {
-            path = folderPath.stringByAppendingPathComponent(name + ".imageset")
+            path = (folderPath as NSString).stringByAppendingPathComponent(name + ".imageset")
             let fm = NSFileManager.defaultManager()
             if false == fm.fileExistsAtPath(path!) {
-                var error: NSError?
-                if false == fm.createDirectoryAtPath(path!, withIntermediateDirectories: false, attributes: nil, error: &error) {
-                    if let error = error {
-                        println(error)
-                        return
-                    }
+                do {
+                    try fm.createDirectoryAtPath(path!, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print(error)
+                    return
                 }
             }
             
-            let jsonPath = path!.stringByAppendingPathComponent("Contents.json")
+            let jsonPath = (path! as NSString).stringByAppendingPathComponent("Contents.json")
             if let stream = NSOutputStream(toFileAtPath: jsonPath, append: false) {
                 stream.open()
                 var error: NSError?
                 let json: AnyObject = createContentsJSON() as AnyObject
-                NSJSONSerialization.writeJSONObject(json, toStream: stream, options: nil, error: &error)
+                NSJSONSerialization.writeJSONObject(json, toStream: stream, options: [], error: &error)
                 stream.close()
             }
         }
