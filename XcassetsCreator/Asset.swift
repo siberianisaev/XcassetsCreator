@@ -14,7 +14,7 @@ class Asset {
     var path: String?
     var images = [String]()
     
-    private var isUniversal: Bool {
+    fileprivate var isUniversal: Bool {
         for image in images {
             for value in ["~ipad", "~iphone"] {
                 if image.hasSubstring(value) {
@@ -25,7 +25,7 @@ class Asset {
         return true
     }
     
-    private var hasPhonePostfix: Bool {
+    fileprivate var hasPhonePostfix: Bool {
         for image in images {
             if image.hasSubstring("~iphone") {
                 return true
@@ -38,34 +38,34 @@ class Asset {
         self.name = name
     }
     
-    func createAsset(folderPath: String) {
+    func createAsset(_ folderPath: String) {
         if let name = name {
-            path = (folderPath as NSString).stringByAppendingPathComponent(name + ".imageset")
-            let fm = NSFileManager.defaultManager()
-            if false == fm.fileExistsAtPath(path!) {
+            path = (folderPath as NSString).appendingPathComponent(name + ".imageset")
+            let fm = FileManager.default
+            if false == fm.fileExists(atPath: path!) {
                 do {
-                    try fm.createDirectoryAtPath(path!, withIntermediateDirectories: false, attributes: nil)
+                    try fm.createDirectory(atPath: path!, withIntermediateDirectories: false, attributes: nil)
                 } catch {
                     print(error)
                     return
                 }
             }
             
-            let jsonPath = (path! as NSString).stringByAppendingPathComponent("Contents.json")
-            if let stream = NSOutputStream(toFileAtPath: jsonPath, append: false) {
+            let jsonPath = (path! as NSString).appendingPathComponent("Contents.json")
+            if let stream = OutputStream(toFileAtPath: jsonPath, append: false) {
                 stream.open()
                 var error: NSError?
-                let json: AnyObject = createContentsJSON() as AnyObject
-                NSJSONSerialization.writeJSONObject(json, toStream: stream, options: [], error: &error)
+                let json = createContentsJSON()
+                JSONSerialization.writeJSONObject(json, to: stream, options: [], error: &error)
                 stream.close()
             }
         }
     }
     
-    private func createContentsJSON() -> [String: AnyObject] {
-        var dictionary = [String: AnyObject]()
+    fileprivate func createContentsJSON() -> [String: Any] {
+        var dictionary = [String: Any]()
         
-        dictionary["images"] = [[String: String]]()
+        dictionary["images"] = [[String: Any]]()
         if isUniversal {
             var names = [Int: String]()
             for image in images {

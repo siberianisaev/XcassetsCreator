@@ -10,12 +10,12 @@ import Foundation
 
 extension String {
 
-    func hasSubstring(substring: String) -> Bool {
-        return self.rangeOfString(substring, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil) != nil
+    func hasSubstring(_ substring: String) -> Bool {
+        return self.range(of: substring, options: NSString.CompareOptions.caseInsensitive, range: nil, locale: nil) != nil
     }
     
-    func stringByRemoveSubstring(substring: String) -> String {
-        return self.stringByReplacingOccurrencesOfString(substring, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+    func stringByRemoveSubstring(_ substring: String) -> String {
+        return self.replacingOccurrences(of: substring, with: "", options: NSString.CompareOptions.caseInsensitive, range: nil)
     }
     
 }

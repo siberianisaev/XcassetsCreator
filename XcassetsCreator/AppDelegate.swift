@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AppKit
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -14,33 +15,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     
-    private var folderPath: String?
-    private var assetsFolderPath: String {
-        return (folderPath! as NSString).stringByAppendingPathComponent((folderPath! as NSString).lastPathComponent + ".xcassets")
+    fileprivate var folderPath: String?
+    fileprivate var assetsFolderPath: String {
+        return (folderPath! as NSString).appendingPathComponent((folderPath! as NSString).lastPathComponent + ".xcassets")
     }
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
 
 
-    @IBAction func selectFolder(sender: AnyObject)
+    @IBAction func selectFolder(_ sender: AnyObject)
     {
         OpenPanel.open { [unowned self] (folders: [String]?) in
             if let folders = folders {
                 for folderPath in folders {
                     self.folderPath = folderPath
                     do {
-                        var files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(folderPath)
+                        var files = try FileManager.default.contentsOfDirectory(atPath: folderPath)
                         files = files.filter() {
                             let pathExtension = ($0 as NSString).pathExtension
                             // Supported Image Formats https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/index.html
                             for value in ["png", "jpg", "jpeg", "tiff", "tif", "gif", "bmp", "BMPf", "ico", "cur", "xbm"] {
-                                if pathExtension.caseInsensitiveCompare(value) == NSComparisonResult.OrderedSame {
+                                if pathExtension.caseInsensitiveCompare(value) == ComparisonResult.orderedSame {
                                     return true
                                 }
                             }
@@ -55,16 +56,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    private func createAssetCataloguesWithImages(images: [String]) {
+    fileprivate func createAssetCataloguesWithImages(_ images: [String]) {
         if images.isEmpty {
             return
         }
         
         let assetsPath = assetsFolderPath
-        let fm = NSFileManager.defaultManager()
-        if false == fm.fileExistsAtPath(assetsPath) {
+        let fm = FileManager.default
+        if false == fm.fileExists(atPath: assetsPath) {
             do {
-                try fm.createDirectoryAtPath(assetsPath, withIntermediateDirectories: true, attributes: nil)
+                try fm.createDirectory(atPath: assetsPath, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print(error)
                 return
@@ -73,13 +74,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.progressIndicator.startAnimation(nil)
         
-        let sorted = images.sort({
-            $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedDescending
+        let sorted = images.sorted(by: {
+            $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedDescending
         })
         
         var assetsDict = [String: Asset]()
         for imageFileName in sorted {
-            var name = (imageFileName as NSString).stringByDeletingPathExtension
+            var name = (imageFileName as NSString).deletingPathExtension
             for value in ["-568h", "@2x", "@3x", "~ipad", "~iphone"] {
                 name = name.stringByRemoveSubstring(value)
             }
@@ -98,17 +99,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             value.createAsset(assetsFolderPath) // Create asset folder & contents json
             
             for imageName in value.images { // Copy images to asset
-                if let folderPath = folderPath, path = value.path {
-                    let oldPath = (folderPath as NSString).stringByAppendingPathComponent(imageName)
-                    let newPath = (path as NSString).stringByAppendingPathComponent(imageName)
+                if let folderPath = folderPath, let path = value.path {
+                    let oldPath = (folderPath as NSString).appendingPathComponent(imageName)
+                    let newPath = (path as NSString).appendingPathComponent(imageName)
                     do {
-                        try fm.copyItemAtPath(oldPath, toPath: newPath)
+                        try fm.copyItem(atPath: oldPath, toPath: newPath)
                     } catch {
                         print(error)
                     }
                 }
             }
         }
+        
+        NSWorkspace.shared().openFile(assetsFolderPath)
         
         self.progressIndicator.stopAnimation(nil)
     }

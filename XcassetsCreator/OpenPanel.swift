@@ -11,22 +11,21 @@ import Cocoa
 
 class OpenPanel: NSObject {
     
-    class func open(onFinish: (([String]?) -> ())) {
+    class func open(_ onFinish: @escaping (([String]?) -> ())) {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = true
-        panel.beginWithCompletionHandler { (result) -> Void in
+        panel.begin { (result) -> Void in
             if result == NSFileHandlingPanelOKButton {
                 var selected = [String]()
-                let fm = NSFileManager.defaultManager()
-                for URL in panel.URLs {
-                    if let path = URL.path  {
-                        var isDirectory: ObjCBool = false
-                        if fm.fileExistsAtPath(path, isDirectory: &isDirectory) && isDirectory {
-                            selected.append(path)
-                            selected += self.recursiveGetDirectoriesFromDirectory(path)
-                        }
+                let fm = FileManager.default
+                for URL in panel.urls {
+                    let path = URL.path
+                    var isDirectory: ObjCBool = false
+                    if fm.fileExists(atPath: path, isDirectory: &isDirectory) && isDirectory.boolValue {
+                        selected.append(path)
+                        selected += self.recursiveGetDirectoriesFromDirectory(path)
                     }
                 }
                 onFinish(selected)
@@ -34,17 +33,17 @@ class OpenPanel: NSObject {
         }
     }
     
-    class func recursiveGetDirectoriesFromDirectory(directoryPath: String) -> [String] {
+    class func recursiveGetDirectoriesFromDirectory(_ directoryPath: String) -> [String] {
         var results = [String]()
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         do {
-            let fileNames = try fm.contentsOfDirectoryAtPath(directoryPath)
+            let fileNames = try fm.contentsOfDirectory(atPath: directoryPath)
             for fileName in fileNames {
-                let path = (directoryPath as NSString).stringByAppendingPathComponent(fileName)
+                let path = (directoryPath as NSString).appendingPathComponent(fileName)
                 
                 var isDirectory: ObjCBool = false
-                if fm.fileExistsAtPath(path, isDirectory: &isDirectory) {
-                    if isDirectory {
+                if fm.fileExists(atPath: path, isDirectory: &isDirectory) {
+                    if isDirectory.boolValue {
                         results.append(path)
                         results += recursiveGetDirectoriesFromDirectory(path)
                     }
