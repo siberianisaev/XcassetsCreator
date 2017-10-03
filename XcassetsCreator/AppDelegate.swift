@@ -111,7 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        NSWorkspace.shared().openFile(assetsFolderPath)
+        NSWorkspace.shared.openFile(assetsFolderPath)
         
         self.progressIndicator.stopAnimation(nil)
     }
